@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f6f5f3">
+<title>the closet outfit menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f6f5f3; --ink:#111; --muted:#55555b; --blue:#e8eef5; --stone:#ecebe7; --line:#d9d7d2;
+  --font:"Inter",-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --script:"Pinyon Script","Snell Roundhand","Brush Script MT",cursive;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid #2a6df4;outline-offset:3px}
+.app{max-width:560px;margin:0 auto;padding:max(22px,env(safe-area-inset-top)) 16px calc(104px + env(safe-area-inset-bottom))}
+
+h1{margin:6px 0 10px;font-size:clamp(32px,9.5vw,44px);font-weight:500;letter-spacing:-.035em;line-height:1.04}
+.script{font-family:var(--script);font-weight:400;font-size:1.3em;letter-spacing:0;line-height:.7;padding:0 .04em}
+.lede{margin:0 0 18px;font-size:15px;line-height:1.45;color:var(--muted)}
+
+.pill{min-height:48px;padding:0 22px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;font-size:15px;font-weight:500}
+.pill.solid{background:var(--ink);color:#fff}
+.pill:disabled{opacity:.55;cursor:default}
+.pill:active{transform:scale(.98)}
+.actions{display:flex;gap:10px;margin:0 0 22px}
+.actions .pill{flex:1}
+.note{margin:0 0 22px;padding:12px 14px;border:1.5px solid var(--ink);border-radius:12px;font-size:14px;font-weight:500}
+
+.hang{position:relative;display:block;width:100%;padding:0;border:0;background:none;text-align:left}
+.clip{display:block;width:44px;height:24px;margin:0 auto -13px;position:relative;z-index:2;border-radius:3px 3px 1px 1px;
+  background:linear-gradient(#efefef,#a5a5a5);box-shadow:0 1px 2px #0005}
+.clip::before{content:"";position:absolute;left:50%;top:-9px;width:22px;height:12px;margin-left:-11px;border:3px solid #b9b9b9;border-bottom:0;border-radius:12px 12px 0 0}
+.photo{position:relative;display:grid;place-items:center;aspect-ratio:1/1.08;padding:16px 10px 10px;overflow:hidden;
+  background:var(--blue);box-shadow:0 1px 3px #0003}
+.photo.stone{background:var(--stone)}
+.photo.occ{aspect-ratio:1/.72}
+.photo img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.photo .e{font-size:46px}
+.em{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;font-size:36px;border:1px solid #0002}
+.chip{position:absolute;right:8px;bottom:8px;padding:4px 10px;border-radius:999px;background:#fff;font-size:12px;font-weight:600;box-shadow:0 1px 2px #0003}
+.hash{display:block;margin:10px 0 2px;font-size:18px;font-weight:500;letter-spacing:-.01em}
+.desc{display:block;font-size:14px;line-height:1.35;color:var(--muted)}
+.hang:active .photo{transform:scale(.99)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:28px 14px}
+.board{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,auto);grid-auto-flow:column;gap:28px 14px}
+
+.opt{display:flex;align-items:center;gap:14px;width:100%;min-height:72px;margin-bottom:10px;padding:8px;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:12px}
+.opt[aria-current=true]{border-color:var(--ink)}
+.opt b{display:block;font-size:16px;font-weight:500}
+.opt small{font-size:13px;color:var(--muted)}
+.th{width:56px;height:56px;flex:none;display:grid;place-items:center;overflow:hidden;background:var(--blue)}
+.th img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.th .em{width:36px;height:36px;font-size:19px}
+.fit{margin-bottom:12px;padding:14px;background:#fff;border:1px solid var(--line);border-radius:12px}
+.fit .hash{margin:0}
+.strip{display:flex;gap:6px;margin:10px 0}
+.strip .th{width:48px;height:48px}
+
+.logo{display:block;width:max-content;margin:40px auto 0;padding:8px 28px 10px;border:1px solid var(--ink);border-radius:50%;font-family:var(--script);font-size:28px;line-height:1}
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:10;display:flex;justify-content:center;gap:10px;
+  padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(246,245,243,.93);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.nav .pill{flex:1;max-width:260px}
+.nav .pill[aria-current=true]{background:var(--ink);color:#fff}
+</style>
+</head>
+<body>
+<main class="app" id="app" aria-live="polite"></main>
+<nav class="nav" aria-label="Main">
+  <button class="pill" id="nHome" data-act="home">Dress me</button>
+  <button class="pill" id="nSaved" data-act="saved">Saved fits</button>
+</nav>
+
+<script>
+const OCC=[
+ ["Class","📚","lectures, labs and long days on campus"],
+ ["Night Out","🪩","going out with friends"],
+ ["Dinner","🍝","a nice table, not too formal"],
+ ["Date","💘","a little extra effort"],
+ ["Interview","💼","polished and professional"],
+ ["Game Day","🏀","show your spirit in the stands"]
+];
+const TYPES=[["top","top","top"],["bottom","bottom","bottom"],["shoes","shoes","shoes"],
+ ["head","head","eyewear or hair piece"],["bag","bag","bag"],["extra","extras","charm or jewelry"]];
+const C=[
+ ["Cat laptop graphic tee","top","👕","#fff","Class,Game Day,Night Out","img/tee.jpg"],
+ ["White ruched cami","top","👚","#fff","Night Out,Date,Dinner"],
+ ["Black blazer","top","🧥","#3b3b3b","Interview,Dinner"],
+ ["Cream knit sweater","top","🧶","#f6e7c8","Class,Date,Dinner"],
+ ["Black game day sweatshirt","top","👕","#555","Game Day,Class"],
+ ["White button-up blouse","top","👔","#fff","Interview,Dinner"],
+ ["Black lace-up denim shorts","bottom","🩳","#444","Night Out","img/shorts.jpg"],
+ ["Brown mini skirt","bottom","🩳","#8a5a44","Night Out,Date"],
+ ["Light wash jeans","bottom","👖","#a9c7ee","Class,Game Day,Dinner,Night Out"],
+ ["Black trousers","bottom","👖","#444","Interview,Dinner"],
+ ["Gray sweatpants","bottom","👖","#c4c4cc","Class,Game Day"],
+ ["Pleated plaid skirt","bottom","🩳","#e9a3c0","Class,Date,Dinner"],
+ ["Black platform flare boots","shoes","👢","#333","Night Out,Class,Game Day","img/boots.jpg"],
+ ["White chunky platforms","shoes","👟","#fff","Class,Night Out,Game Day,Date"],
+ ["Black loafers","shoes","👞","#333","Interview,Dinner"],
+ ["Black ankle boots","shoes","👢","#444","Night Out,Dinner,Date"],
+ ["Pink sneakers","shoes","👟","#ff9ec9","Class,Game Day"],
+ ["Black square glasses","head","👓","#fff","Class,Interview,Dinner,Date,Game Day,Night Out","img/glasses.jpg"],
+ ["Pink baseball cap","head","🧢","#ffb6d5","Class,Game Day"],
+ ["Pearl hair clips","head","🎀","#fff4f8","Date,Dinner,Night Out"],
+ ["Black patent shoulder bag","bag","👜","#222","Night Out,Date,Dinner,Class","img/bag.jpg"],
+ ["Black tote bag","bag","👜","#3b3b3b","Class,Interview,Dinner,Game Day"],
+ ["Skull star raccoon-tail charm","extra","⭐","#dcdce6","Night Out,Class,Game Day","img/charm.jpg"],
+ ["Pearl necklace","extra","📿","#fff4f8","Date,Dinner,Interview"],
+ ["Silver chain belt","extra","⛓️","#dcdce6","Night Out,Date"]
+].map((a,i)=>({id:i,name:a[0],type:a[1],icon:a[2],color:a[3],occ:a[4].split(","),img:a[5]||null}));
+const WEATHER={temp:58,text:"cloudy",icon:"⛅"};
+
+let S={view:"home",occ:null,fit:{},swap:null,saved:[],t0:Date.now(),justSaved:null,isSaved:false};
+const $=s=>document.querySelector(s);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const pool=(t,o)=>C.filter(i=>i.type===t&&i.occ.includes(o));
+const slug=o=>o.toLowerCase().replace(" ","-");
+const tint=n=>n%2?" stone":"";
+function makeFit(){S.fit={};TYPES.forEach(([k])=>{S.fit[k]=pick(pool(k,S.occ))});S.isSaved=false;S.justSaved=null}
+const pic=i=>i.img
+  ?`<img src="${i.img}" alt="" onerror="this.outerHTML='<span class=&quot;em&quot; style=&quot;background:${i.color}&quot;>${i.icon}</span>'">`
+  :`<span class="em" style="background:${i.color}">${i.icon}</span>`;
+const logo='<div class="logo" aria-hidden="true">closet</div>';
+
+function home(){
+  return `<h1>the <span class="script">closet</span> outfit menu</h1>
+  <p class="lede">What are you dressing for? Tap an occasion and get a full look from clothes you already own.</p>
+  <div class="grid">${OCC.map(([o,e,d],i)=>`<button class="hang" data-act="occ" data-v="${o}" aria-label="${o}: ${d}">
+    <span class="clip"></span><span class="photo occ${tint(i%2+Math.floor(i/2)%2)}"><span class="e" aria-hidden="true">${e}</span></span>
+    <span class="hash">#${slug(o)}</span><span class="desc">${d}</span></button>`).join("")}</div>${logo}`;
+}
+function outfit(){
+  const chilly=WEATHER.temp<60?" Chilly, so layer up.":"";
+  const card=([k,h,ph],idx)=>{const i=S.fit[k],n=pool(k,S.occ).length;
+    if(!i)return `<div class="hang"><span class="clip"></span><span class="photo${tint(idx)}"><span class="desc">Nothing tagged for ${S.occ}</span></span><span class="hash">#${h}</span></div>`;
+    return `<button class="hang" data-act="swap" data-v="${k}" aria-label="${i.name}, ${ph}. ${n>1?"Tap to swap.":"No other options."}">
+      <span class="clip"></span><span class="photo${tint(idx)}">${pic(i)}${n>1?'<span class="chip">⇄ swap</span>':""}</span>
+      <span class="hash">#${h}</span><span class="desc">${i.name}</span></button>`};
+  return `<h1>your ${S.occ.toLowerCase()} fit</h1>
+  <p class="lede"><span aria-hidden="true">${WEATHER.icon}</span> ${WEATHER.temp}°F and ${WEATHER.text}.${chilly}</p>
+  <div class="actions"><button class="pill" data-act="again">New outfit</button>
+    <button class="pill solid" data-act="save" ${S.isSaved?"disabled":""}>${S.isSaved?"Saved":"Save outfit"}</button></div>
+  ${S.justSaved?`<p class="note" role="status">Saved. You got dressed in ${S.justSaved} seconds.</p>`:""}
+  <div class="board">${TYPES.map(card).join("")}</div>${logo}`;
+}
+function swap(){
+  const k=S.swap,ph=TYPES.find(t=>t[0]===k)[2];
+  return `<h1>swap your ${ph}</h1><p class="lede">Choose one that works for ${S.occ.toLowerCase()}.</p>
+  ${pool(k,S.occ).map(i=>`<button class="opt" data-act="choose" data-v="${i.id}" ${i.id===S.fit[k].id?'aria-current="true"':""}>
+    <span class="th" aria-hidden="true">${pic(i)}</span><span><b>${i.name}</b>${i.id===S.fit[k].id?"<small>Current pick</small>":""}</span></button>`).join("")}
+  <div class="actions"><button class="pill" data-act="cancel">Cancel</button></div>`;
+}
+function saved(){
+  const list=S.saved.length?S.saved.map(s=>`<div class="fit"><span class="hash">#${slug(s.occ)}</span>
+    <div class="strip" aria-hidden="true">${s.items.map(i=>`<span class="th">${pic(i)}</span>`).join("")}</div>
+    <span class="desc">${s.items.map(i=>i.name).join(", ")}<br>Opened to saved in ${s.sec}s</span></div>`).join("")
+   :`<p class="lede">No saved outfits yet. Pick an occasion, then tap Save outfit.</p><div class="actions"><button class="pill solid" data-act="home">Dress me</button></div>`;
+  return `<h1>saved fits</h1><p class="lede">${S.saved.length} saved. They clear when you refresh this prototype.</p>${list}`;
+}
+function render(){
+  $("#app").innerHTML={home,outfit,swap,saved}[S.view]();
+  $("#nHome").setAttribute("aria-current",S.view!=="saved");
+  $("#nSaved").setAttribute("aria-current",S.view==="saved");
+  $("#nSaved").textContent=S.saved.length?`Saved fits (${S.saved.length})`:"Saved fits";
+  if(S.view!=="outfit")window.scrollTo(0,0);
+}
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;
+  const a=b.dataset.act,v=b.dataset.v;
+  if(a==="occ"){S.occ=v;S.t0=Date.now();makeFit();S.view="outfit"}
+  else if(a==="swap"){if(pool(v,S.occ).length>1){S.swap=v;S.view="swap"}}
+  else if(a==="choose"){S.fit[S.swap]=C[+v];S.isSaved=false;S.justSaved=null;S.view="outfit"}
+  else if(a==="cancel"){S.view="outfit"}
+  else if(a==="again"){makeFit()}
+  else if(a==="save"){const sec=Math.round((Date.now()-S.t0)/1000);
+    S.saved.unshift({occ:S.occ,items:TYPES.map(([k])=>S.fit[k]).filter(Boolean),sec});S.isSaved=true;S.justSaved=sec}
+  else if(a==="home"){S.view="home";S.t0=Date.now();S.justSaved=null}
+  else if(a==="saved"){S.view="saved"}
+  render();
+});
+render();
+</script>
+</body>
+</html>
